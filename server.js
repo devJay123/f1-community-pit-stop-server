@@ -24,3 +24,5 @@ const pool = mysql.createPool({
   port: '31635',
   database: 'pitstop',
 });
+
+// gitignore
