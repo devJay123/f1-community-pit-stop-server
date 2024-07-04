@@ -28,6 +28,4 @@ const pool = mysql.createPool({
 // gitignore
 app.listen(PORT, function (req, res) {
   console.log(`========== PIT STOP SERVER is RUNNING : ${PORT} ==========`);
-  console.log('test')
-  console.log('test1')
 });
