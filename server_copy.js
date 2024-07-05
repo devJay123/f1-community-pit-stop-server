@@ -31,7 +31,8 @@ const pool = mysql.createPool({
 app.get(`/api/boardlist/:teamnum`, function (req, res) {
   let temanum = req.params.teamnum;
 
-  const sql = `select * from board where teamnum=? order by id desc`;
+  // marraDB 불러오기
+  const sql = `select id, title, userid, readnum, date_format(wdate, '%Y.%m.%d %H:%i') wdate From board where teamnum=? order by id desc`;
 
   pool.getConnection(function (err, con) {
     if (err) return res.status(500).send(err);
@@ -39,9 +40,9 @@ app.get(`/api/boardlist/:teamnum`, function (req, res) {
       con.release();
       if (err) return res.status(500).send(err);
       if (result) {
-        res.json({ result: result });
+        res.json(result);
       } else {
-        res.json({ result: `${temanum} SEND FAIL` });
+        res.json(`${temanum} SEND FAIL`);
       }
     });
   });
