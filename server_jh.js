@@ -31,6 +31,33 @@ const pool = mysql.createPool({
   database: 'pitstop',
 });
 
+// board 조회
+app.get('/api/board/:id', (req, res) => {
+  const id = req.params.id;
+
+  const sql = `select * from board where id = ?`;
+
+  pool.getConnection((err, con) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+
+    con.query(sql, id, (err, result) => {
+      con.release();
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (result.length > 0) {
+        res.json(result);
+      } else {
+        res.json({ result: 'fail' });
+      }
+    });
+  });
+});
+
+// board 작성
 app.post('/api/board', (req, res) => {
   const { title, userid, content } = req.body;
 
@@ -48,6 +75,31 @@ app.post('/api/board', (req, res) => {
 
     con.query(sql, [title, userid, content], (err, result) => {
       con.release();
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (result.affectedRows > 0) {
+        res.json({ result: 'success' });
+      } else {
+        res.json({ result: 'fail' });
+      }
+    });
+  });
+});
+
+// board 수정
+app.put('/api/board/:id', (req, res) => {
+  const id = req.params.id;
+  const { title, userid, content } = req.body;
+  const sql = `update board set title = ?, userid = ?, content = ? where id = ?`;
+
+  pool.getConnection((err, con) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+
+    con.query(sql, [title, userid, content, id], (err, result) => {
       if (err) {
         return res.status(500).send(err);
       }
