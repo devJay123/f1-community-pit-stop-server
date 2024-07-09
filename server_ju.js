@@ -86,7 +86,26 @@ app.post('/api/login', (req, res) => {
   if (!userid || !passwd) {
     return res.status(400).send('id 와 password 모두 입력하세요');
   }
-  const sql = 'select * from where ';
+  const sql = 'select * from MEMBER where userid = ? and passwd = ?';
+
+  pool.getConnection((err, con) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+
+    con.query(sql, [userid, passwd], (err, result) => {
+      con.release();
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (result.length > 0) {
+        res.json({ result: 'success' });
+      } else {
+        res.json({ result: 'fail' });
+      }
+    });
+  });
 });
 
 // signup
