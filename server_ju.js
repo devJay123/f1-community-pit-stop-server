@@ -134,19 +134,6 @@ app.put("/api/boards/:id", (req, res) => {
   });
 });
 
-// app.put('/api/boards/:id', (req, res) => {
-//   const { id } = req.params;
-//   const { title, userid, content } = req.body;
-//   const sql = `UPDATE boards SET title=?, userid=?, content=? WHERE id=?`;
-//   pool.query(sql, [title, userid, content, id], (err, result) => {
-//     if (err) {
-//       console.error('Query error:', err);
-//       return res.status(500).json({ result: 'fail', error: err.message });
-//     }
-//     res.json({ result: 'success' });
-//   });
-// });
-
 
 
 //--------------------------게시판 조회-------------------------------
@@ -238,53 +225,14 @@ app.put('/api/boardReadNum/:id', (req,res) => {
   })
 })
 // 조회수 증가
-// app.put('/api/boardReadNum/:id', (req,res)=>{
-//   const id=req.params.id;
-//   const sql = `UPDATE board SET readnum=readnum+1 where id=?`
-//   pool.run(sql,[id],(err) => {
-//       if(err) return res.status(500).send(err)
-//       res.json({result:'success'})
-//   })
-// })
-
-// // 조회수 증가
-// app.put('/api/boardReadNum/:teamnum/:id', (req,res)=>{
-//   const { teamnum, id } = req.params;
-//   const sql = `UPDATE board SET readnum=readnum+1 where teamnum=? and id=?`
-//   pool.run(sql,[id, teamnum],(err) => {
-//       if(err) return res.status(500).send(err)
-//       res.json({result:'success'})
-//   })
-// })
-
-// 조회수 증가
-// app.put('/api/boardReadNum/:teamnum/:id', (req,res)=>{
-//   const { teamnum, id } = req.params;
-//   const sql = `UPDATE board SET readnum=readnum+1 where teamnum=? and id=?`
-//   pool.run(sql,[teamnum, id],(err) => {
-//       if(err) return res.status(500).send(err)
-//       res.json({result:'success'})
-//   })
-// })
-
-// app.get('/api/boardReadNum/:teamnum/:id', (req,res) => {
-//   const { teamnum, id } = req.params;
-//   // 조회수 조회
-//   const sql = `SELECT readnum FROM board WHERE teamnum = ? AND id = ?`
-//   pool.getConnection((err,con) => {
-//       if(err) return res.status(500).send(err)
-//       con.query(sql, [teamnum ,id],(err, result) => {
-//           con.release()
-//           if(err) return res.status(500).send(err)
-//           // console.log(result)
-//           if(result.affectedRows>0) {
-//               res.json({result:'success'})
-//           }else{
-//               return res.status(404).send('Board not found')
-//           }
-//   })
-//   })
-// })
+app.put('/api/boardReadNum/:id', (req,res)=>{
+  const id=req.params.id;
+  const sql = `UPDATE board SET readnum=readnum+1 where id=?`
+  pool.run(sql,[id],(err) => {
+      if(err) return res.status(500).send(err)
+      res.json({result:'success'})
+  })
+})
 
 //--------------------------댓글 쓰기-------------------------------
 
