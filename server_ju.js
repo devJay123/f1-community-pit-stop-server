@@ -79,7 +79,7 @@ app.get(`/api/boardlist/:teamnum`, function (req, res) {
 }); */
 
 // login & signup. 로그인, 회원가입
-// 로그인
+// login, 로그인
 app.post('/api/login', (req, res) => {
   const { userid, passwd } = req.body;
 
@@ -108,7 +108,7 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-// signup
+// signup, 회원가입
 app.post('/api/signup', (req, res) => {
   const { name, nickname, userid, passwd, email } = req.body;
 
