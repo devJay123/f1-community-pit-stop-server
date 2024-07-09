@@ -78,6 +78,48 @@ app.get(`/api/boardlist/:teamnum`, function (req, res) {
   });
 }); */
 
+// login & signup. 로그인, 회원가입
+// 로그인
+app.post('/api/login', (req, res) => {
+  const { userid, passwd } = req.body;
+
+  if (!userid || !passwd) {
+    return res.status(400).send('id 와 password 모두 입력하세요');
+  }
+  const sql = 'select * from where ';
+});
+
+// signup
+app.post('/api/signup', (req, res) => {
+  const { name, nickname, userid, passwd, email } = req.body;
+
+  if (!name || !nickname || !userid || !passwd || !email) {
+    return res.status(400).send('입력칸을 모두 입력하세요');
+  }
+
+  const sql =
+    'insert into MEMBER(name, nickname, userid, passwd, email) values (?, ?, ?, ?, ?)';
+
+  pool.getConnection((err, con) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+
+    con.query(sql, [name, nickname, userid, passwd, email], (err, result) => {
+      con.release();
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (result.affectedRows > 0) {
+        res.json({ result: 'success' });
+      } else {
+        res.json({ result: 'fail' });
+      }
+    });
+  });
+});
+
 // board 작성
 app.post('/api/boards', (req, res) => {
   const { title, userid, content, teamnum } = req.body;
@@ -94,7 +136,7 @@ app.post('/api/boards', (req, res) => {
       return res.status(500).send(err);
     }
 
-    con.query(sql, [title, userid, content], (err, result) => {
+    con.query(sql, [title, userid, content, teamnum], (err, result) => {
       con.release();
       if (err) {
         return res.status(500).send(err);
@@ -134,11 +176,11 @@ app.put('/api/boards/:id', (req, res) => {
   });
 });
 
-// app.put('/api/boards/:teamnum/:id', (req, res) => {
-//   const { teamnum, id } = req.params;
+// app.put('/api/boards/:id', (req, res) => {
+//   const { id } = req.params;
 //   const { title, userid, content } = req.body;
-//   const sql = `UPDATE boards SET title=?, userid=?, content=? WHERE id=? AND teamnum=?`;
-//   pool.query(sql, [title, userid, content, id, teamnum], (err, result) => {
+//   const sql = `UPDATE boards SET title=?, userid=?, content=? WHERE id=?`;
+//   pool.query(sql, [title, userid, content, id], (err, result) => {
 //     if (err) {
 //       console.error('Query error:', err);
 //       return res.status(500).json({ result: 'fail', error: err.message });
@@ -214,6 +256,75 @@ app.delete('/api/boards/:id', (req, res) => {
     });
   });
 });
+
+//글 보기 관련
+app.put('/api/boardReadNum/:id', (req, res) => {
+  const id = req.params.id;
+  // 조회수 증가
+  const sql = `UPDATE board SET readnum = readnum+1 where id=?`;
+  pool.getConnection((err, con) => {
+    if (err) return res.status(500).send(err);
+    con.query(sql, [id], (err, result) => {
+      con.release();
+      if (err) return res.status(500).send(err);
+      // console.log(result)
+      if (result.affectedRows > 0) {
+        res.json({ result: 'success' });
+      } else {
+        return res.status(404).send('Board not found');
+      }
+    });
+  });
+});
+// 조회수 증가
+// app.put('/api/boardReadNum/:id', (req,res)=>{
+//   const id=req.params.id;
+//   const sql = `UPDATE board SET readnum=readnum+1 where id=?`
+//   pool.run(sql,[id],(err) => {
+//       if(err) return res.status(500).send(err)
+//       res.json({result:'success'})
+//   })
+// })
+
+// // 조회수 증가
+// app.put('/api/boardReadNum/:teamnum/:id', (req,res)=>{
+//   const { teamnum, id } = req.params;
+//   const sql = `UPDATE board SET readnum=readnum+1 where teamnum=? and id=?`
+//   pool.run(sql,[id, teamnum],(err) => {
+//       if(err) return res.status(500).send(err)
+//       res.json({result:'success'})
+//   })
+// })
+
+// 조회수 증가
+// app.put('/api/boardReadNum/:teamnum/:id', (req,res)=>{
+//   const { teamnum, id } = req.params;
+//   const sql = `UPDATE board SET readnum=readnum+1 where teamnum=? and id=?`
+//   pool.run(sql,[teamnum, id],(err) => {
+//       if(err) return res.status(500).send(err)
+//       res.json({result:'success'})
+//   })
+// })
+
+// app.get('/api/boardReadNum/:teamnum/:id', (req,res) => {
+//   const { teamnum, id } = req.params;
+//   // 조회수 조회
+//   const sql = `SELECT readnum FROM board WHERE teamnum = ? AND id = ?`
+//   pool.getConnection((err,con) => {
+//       if(err) return res.status(500).send(err)
+//       con.query(sql, [teamnum ,id],(err, result) => {
+//           con.release()
+//           if(err) return res.status(500).send(err)
+//           // console.log(result)
+//           if(result.affectedRows>0) {
+//               res.json({result:'success'})
+//           }else{
+//               return res.status(404).send('Board not found')
+//           }
+//   })
+//   })
+// })
+
 //--------------------------댓글 쓰기-------------------------------
 
 app.post(`/api/boards/:id/reply`, (req, res) => {
