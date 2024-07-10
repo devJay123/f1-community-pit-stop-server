@@ -9,6 +9,33 @@ const app = express();
 // 서버 포트 설정
 const PORT = process.env.PORT || 8000;
 
+// 채팅
+const socketio = require('socket.io');
+const http = require('http');
+// socketio를 사용할 경우 http 모듈을 사용해서 server를 만든다.
+const server = http.createServer(app);
+// socket 서버 설정
+const io = new socketio.Server(server, {
+  cors: {
+    origin: 'http://localhost:5173',
+    mathods: ['GET', 'POST'],
+  },
+});
+
+io.on('connection', (socket) => {
+  console.log('새로운 사용자가 연결되었습니다.');
+
+  socket.on('chat message', (msg) => {
+    // 메시지를 그대로 브로드캐스트합니다. 이미 사용자 ID가 포함되어 있습니다.
+    // console.log(msg);
+    io.emit('chat message', msg);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('사용자가 연결을 종료했습니다.');
+  });
+});
+
 // 미들웨어 설정
 app.use(cors());
 app.use(bodyParser.json());
@@ -379,6 +406,11 @@ app.put(`/api/boards/reply/:rid`, (req, res) => {
 });
 
 // gitignore
-app.listen(PORT, function (req, res) {
+/* app.listen(PORT, function (req, res) {
   console.log(`========== PIT STOP SERVER is RUNNING : ${PORT} ==========`);
+}); */
+
+// socketio를 이용하기에 html 모듈을 이용해 서버 시작
+server.listen(PORT, () => {
+  console.log('SERVER IS RUNNING');
 });
