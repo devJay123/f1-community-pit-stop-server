@@ -166,6 +166,32 @@ app.post('/api/signup', (req, res) => {
   });
 });
 
+// signup 중복체크, 회원가입 중복체크
+app.post(`/api/signup/check`, (req, res) => {
+  const { type, data } = req.body;
+
+  const sql = `select * from MEMBER where ${type} = ?`;
+
+  pool.getConnection((err, con) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+
+    con.query(sql, [data], (err, result) => {
+      con.release();
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (result.length === 0) {
+        res.json({ result: 'success' });
+      } else {
+        res.json({ result: 'fail' });
+      }
+    });
+  });
+});
+
 // board 작성
 app.post('/api/boards', (req, res) => {
   const { title, userid, content, teamnum } = req.body;
