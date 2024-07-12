@@ -21,8 +21,10 @@ const server = http.createServer(app);
 // socket 서버 설정
 const io = new socketio.Server(server, {
   cors: {
-    origin:
+    origin: [
       'https://web-f1-community-pit-stop-ly5p232t0b63615b.sel5.cloudtype.app',
+      'http://localhost:5173',
+    ],
     mathods: ['GET', 'POST'],
   },
 });
