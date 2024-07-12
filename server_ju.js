@@ -22,7 +22,7 @@ const server = http.createServer(app);
 const io = new socketio.Server(server, {
   cors: {
     origin:
-      'https://f1-community-pit-stop-n6s0ljrny-morests-projects.vercel.app/',
+      'https://web-f1-community-pit-stop-ly5p232t0b63615b.sel5.cloudtype.app',
     mathods: ['GET', 'POST'],
   },
 });
