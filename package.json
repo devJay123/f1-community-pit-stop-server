@@ -2,7 +2,7 @@
   "name": "pit-stop-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server_ju.js",
   "scripts": {
     "dev": "nodemon server.js",
     "dev2": "nodemon server_jh.js",

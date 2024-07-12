@@ -17,7 +17,8 @@ const server = http.createServer(app);
 // socket 서버 설정
 const io = new socketio.Server(server, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin:
+      'https://f1-community-pit-stop-n6s0ljrny-morests-projects.vercel.app',
     mathods: ['GET', 'POST'],
   },
 });
