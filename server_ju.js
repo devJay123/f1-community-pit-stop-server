@@ -7,7 +7,7 @@ const cors = require('cors');
 const app = express();
 
 // 서버 포트 설정
-// const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 80;
 
 // 미들웨어 설정
 app.use(cors());
@@ -438,6 +438,6 @@ app.put(`/api/boards/reply/:rid`, (req, res) => {
 }); */
 
 // socketio를 이용하기에 html 모듈을 이용해 서버 시작
-server.listen(8000, () => {
+server.listen(PORT, () => {
   console.log('SERVER IS RUNNING');
 });
