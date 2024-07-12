@@ -9,6 +9,10 @@ const app = express();
 // 서버 포트 설정
 const PORT = process.env.PORT || 8000;
 
+// 미들웨어 설정
+app.use(cors());
+app.use(bodyParser.json());
+
 // 채팅
 const socketio = require('socket.io');
 const http = require('http');
@@ -18,7 +22,7 @@ const server = http.createServer(app);
 const io = new socketio.Server(server, {
   cors: {
     origin:
-      'https://f1-community-pit-stop-n6s0ljrny-morests-projects.vercel.app',
+      'https://f1-community-pit-stop-n6s0ljrny-morests-projects.vercel.app/',
     mathods: ['GET', 'POST'],
   },
 });
@@ -36,10 +40,6 @@ io.on('connection', (socket) => {
     console.log('사용자가 연결을 종료했습니다.');
   });
 });
-
-// 미들웨어 설정
-app.use(cors());
-app.use(bodyParser.json());
 
 // path 모듈 추가
 const path = require('path');
