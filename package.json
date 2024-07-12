@@ -4,6 +4,7 @@
   "description": "",
   "main": "server_ju.js",
   "scripts": {
+    "start": "node server_ju.js",
     "dev": "nodemon server_ju.js"
   },
   "author": "",
